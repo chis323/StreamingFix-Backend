@@ -1,0 +1,7 @@
+package org.example.streamingfix.repository;
+
+import org.example.streamingfix.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepo extends JpaRepository<User,Long> {
+}
