@@ -1,5 +1,6 @@
 package org.example.streamingfix.service.serviceimpl;
 
+import lombok.AllArgsConstructor;
 import org.example.streamingfix.entity.Library;
 import org.example.streamingfix.entity.User;
 import org.example.streamingfix.repository.LibraryRepo;
@@ -7,15 +8,18 @@ import org.example.streamingfix.repository.UserRepo;
 import org.example.streamingfix.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final LibraryRepo libraryRepo;
 
-    public UserServiceImpl(UserRepo userRepo, LibraryRepo libraryRepo) {
-        this.userRepo = userRepo;
-        this.libraryRepo = libraryRepo;
+    public List<User> findAllUsers() {
+        return userRepo.findAll();
     }
+
 
     @Override
     public User findByUserId(Long userId)
