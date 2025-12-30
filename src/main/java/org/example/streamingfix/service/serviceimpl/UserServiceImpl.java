@@ -6,7 +6,9 @@ import org.example.streamingfix.entity.User;
 import org.example.streamingfix.repository.LibraryRepo;
 import org.example.streamingfix.repository.UserRepo;
 import org.example.streamingfix.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,6 +18,12 @@ public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final LibraryRepo libraryRepo;
 
+    @Override
+    public User createUser(User user)
+    {
+        return userRepo.save(user);
+    }
+
     public List<User> findAllUsers() {
         return userRepo.findAll();
     }
@@ -24,23 +32,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUserId(Long userId)
     {
-        return userRepo.findById(userId).orElse(null);
-    }
-
-    @Override
-    public User createUser(User user)
-    {
-        return userRepo.save(user);
+        return userRepo.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with id %d not found", userId)));
     }
 
     @Override
     public User editUserCredentials(Long userId, User user)
     {
+        userRepo.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with id %d not found", userId)));
         return userRepo.save(user);
     }
 
     @Override
     public void deleteByUserId(Long userId){
+        userRepo.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with id %d not found", userId)));
         userRepo.deleteById(userId);
     }
 
